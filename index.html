@@ -1,845 +1,745 @@
 <!DOCTYPE html>
-<html lang="am">
+<html lang="am" id="htmlTag">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ሂኒቾ የመኪና ዕጣ</title>
-    <!-- የቀለም ርጭት (Confetti) ላይብረሪ ከቀላል ስክሪፕት ጋር -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <title>Mekdes VIP - ልዩ መዝናኛ እና እረፍት</title>
+    <!-- FontAwesome ለቴሌግራም እና ሌሎች አይኮኖች -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #000000;
-            color: #ffffff;
+        * {
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
+        }
+        body {
+            background-color: #0d0d0d;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        header {
+            background: linear-gradient(135deg, #1a1a1a, #000000);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #d4af37;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            color: #d4af37;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin-left: 15px;
+            transition: 0.3s;
+        }
+        nav a:hover {
+            color: #d4af37;
+        }
+        /* የቋንቋ መምረጫ ስታይል */
+        .lang-switch {
+            background-color: #1f1f1f;
+            border: 1px solid #d4af37;
+            color: #d4af37;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .lang-switch:hover {
+            background-color: #d4af37;
+            color: #000;
+        }
+        /* የሚንቀሳቀስ ማስታወቂያ ስታይል (Marquee) */
+        .marquee-container {
+            background-color: #d4af37;
+            color: #000000;
+            padding: 10px 0;
+            font-weight: bold;
+            font-size: 16px;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
+        }
+        .marquee-container marquee {
+            letter-spacing: 1px;
+        }
+        .status-badge {
+            background-color: #00ff66;
+            color: #000;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        .hero {
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 50px 20px;
+            background: radial-gradient(circle, #2b2b2b 0%, #0d0d0d 100%);
+        }
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #d4af37;
+        }
+        .hero p {
+            font-size: 20px;
+            max-width: 600px;
+            margin-bottom: 30px;
+            color: #cccccc;
+        }
+        .btn {
+            background-color: #d4af37;
+            color: #000000;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin: 5px;
+        }
+        .btn:hover {
+            background-color: #f3c653;
+            transform: scale(1.05);
+        }
+        .btn-secondary {
+            background-color: transparent;
+            color: #d4af37;
+            border: 2px solid #d4af37;
+        }
+        .btn-secondary:hover {
+            background-color: #d4af37;
+            color: #000000;
+        }
+        section {
+            padding: 70px 20px;
+            text-align: center;
+        }
+        section h2 {
+            font-size: 34px;
+            margin-bottom: 40px;
+            color: #d4af37;
+        }
+        .packages, .faq, .rules-section, .payment-section, .testimonials-section {
+            background-color: #141414;
+        }
+        .package-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .package-card {
+            background-color: #1f1f1f;
+            border: 1px solid #333;
+            padding: 30px;
+            width: 320px;
+            border-radius: 10px;
+            transition: 0.3s;
+            position: relative;
+        }
+        .package-card:hover {
+            border-color: #d4af37;
+            transform: translateY(-5px);
+        }
+        .package-card h3 {
+            color: #d4af37;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #f3c653;
+            margin: 10px 0;
+        }
+        .price-usd {
+            font-size: 16px;
+            color: #aaa;
+            margin-bottom: 20px;
+        }
+        /* የክፍያ አማራጭ ካርድ ስታይል */
+        .payment-container {
+            max-width: 550px;
+            margin: 0 auto;
+        }
+        .payment-card {
+            background-color: #1f1f1f;
+            border: 2px solid #d4af37;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: left;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+        .payment-card h3 {
+            color: #d4af37;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        .payment-info {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #ddd;
+        }
+        .payment-info span {
+            color: #f3c653;
+            font-weight: bold;
+        }
+        /* ደረሰኝ ማላኪያ የቅጽ (Form) ስታይል */
+        .receipt-form-group {
+            margin-top: 25px;
+            border-top: 1px dashed #444;
+            padding-top: 20px;
+        }
+        .receipt-form-group label {
+            display: block;
+            color: #d4af37;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+        .file-input {
+            width: 100%;
+            background-color: #2b2b2b;
+            border: 1px solid #444;
+            color: #ccc;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        .file-input::-webkit-file-upload-button {
+            background-color: #d4af37;
+            color: #000;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .submit-receipt-btn {
+            background-color: #0088cc;
+            color: #fff;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-        }
-        .container {
-            background: #111111;
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.2);
-            width: 100%;
-            max-width: 480px;
-            border: 2px solid #d4af37;
-        }
-        .marquee-box {
-            background: #d4af37;
-            color: #000000;
-            padding: 10px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 14px;
-            margin-bottom: 20px;
-            overflow: hidden;
-            white-space: nowrap;
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
-        }
-        h2 {
-            color: #d4af37;
-            text-align: center;
-            margin-bottom: 5px;
-            font-size: 26px;
-            letter-spacing: 0.5px;
-        }
-        .subtitle {
-            text-align: center;
-            font-size: 14px;
-            color: #cccccc;
-            margin-bottom: 15px;
-        }
-        /* የሰዓት መቁጠሪያ ዲዛይን */
-        .timer-box {
-            background: rgba(212, 175, 55, 0.15);
-            border: 1px solid #d4af37;
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .timer-title {
-            font-size: 12px;
-            color: #d4af37;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        #countdown {
-            font-size: 18px;
-            font-weight: bold;
-            color: #ffffff;
-            letter-spacing: 1px;
-        }
-        .notice-box {
-            background: rgba(212, 175, 55, 0.1);
-            border: 1px dashed #d4af37;
-            color: #f3e5ab;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 13px;
-            text-align: center;
-            margin-bottom: 15px;
-            line-height: 1.4;
-        }
-        .prizes-box {
-            background: #1a1a1a;
-            border: 1px solid #d4af37;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-        .prizes-box h4 {
-            margin: 0 0 10px 0;
-            color: #d4af37;
-            text-align: center;
-            font-size: 16px;
-            border-bottom: 1px dashed rgba(212, 175, 55, 0.4);
-            padding-bottom: 5px;
-        }
-        .prizes-box ul {
-            margin: 0;
-            padding-left: 20px;
-            color: #e5e5e5;
-        }
-        .prizes-box li {
-            margin-bottom: 6px;
-        }
-        /* ተደጋጋሚ ጥያቄዎች (FAQ) */
-        .faq-box {
-            background: #1a1a1a;
-            border: 1px solid #d4af37;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-            font-size: 13px;
-        }
-        .faq-box h4 {
-            margin: 0 0 10px 0;
-            color: #d4af37;
-            text-align: center;
-            font-size: 15px;
-            border-bottom: 1px dashed rgba(212, 175, 55, 0.4);
-            padding-bottom: 5px;
-        }
-        .faq-q {
-            font-weight: bold;
-            color: #f3e5ab;
-            margin-top: 8px;
-        }
-        .faq-a {
-            color: #cccccc;
-            font-size: 12px;
-            margin-bottom: 5px;
-        }
-        .available-numbers-box {
-            background: #1a1a1a;
-            border: 1px solid #d4af37;
-            border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 15px;
-            max-height: 100px;
-            overflow-y: auto;
-            text-align: center;
-        }
-        .available-numbers-title {
-            font-size: 12px;
-            color: #d4af37;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .number-tag {
-            display: inline-block;
-            background: #333333;
-            color: #f3e5ab;
-            padding: 3px 8px;
-            margin: 2px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: bold;
-            border: 1px solid #d4af37;
-            cursor: pointer;
-        }
-        .ticket-info {
-            text-align: center;
-            font-weight: bold;
-            color: #000000;
-            margin-bottom: 20px;
-            font-size: 16px;
-            background: #d4af37;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
-            color: #d4af37;
-            font-size: 13px;
-        }
-        input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #444444;
-            background: #1a1a1a;
-            color: #ffffff;
-            border-radius: 8px;
-            font-size: 15px;
-            box-sizing: border-box;
-            transition: all 0.3s;
-        }
-        input:focus {
-            border-color: #d4af37;
-            outline: none;
-            box-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
-        }
-        button {
-            background: #d4af37;
-            color: #000000;
-            border: none;
-            padding: 12px;
-            font-size: 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s;
-            font-weight: bold;
-            margin-top: 5px;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
-        }
-        button:hover {
-            background: #e6c547;
-            transform: translateY(-1px);
-        }
-        .payment-section, .admin-section, .waiting-section, .success-section {
-            display: none;
-        }
-        .payment-box {
-            background: #1a1a1a;
-            border: 1px solid #d4af37;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            font-size: 14px;
-        }
-        .payment-box h3 {
-            color: #d4af37;
-            margin-top: 0;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        .bank-item {
-            background: #111111;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #333333;
-            font-size: 13px;
-            color: #e5e5e5;
-        }
-        .bank-item b {
-            color: #d4af37;
-        }
-        .account-name {
-            text-align: center;
-            font-weight: bold;
-            color: #000000;
-            margin-top: 12px;
-            background: #d4af37;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-        .receipt-upload {
-            margin-top: 15px;
-            background: #111111;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px dashed #d4af37;
-        }
-        .admin-section {
-            background: #1a1a1a;
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid #d4af37;
-        }
-        .admin-box-title {
-            color: #d4af37;
-            font-size: 13px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .admin-number-management {
-            background: #111111;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #333333;
-            margin-bottom: 15px;
-        }
-        .admin-num-tag {
-            display: inline-block;
-            background: #222222;
-            color: #f3e5ab;
-            padding: 4px 8px;
-            margin: 2px;
-            border-radius: 4px;
-            font-size: 11px;
-            border: 1px solid #d4af37;
-        }
-        .admin-num-tag span {
-            color: #ff4d4d;
-            cursor: pointer;
-            margin-left: 5px;
-            font-weight: bold;
-        }
-        .table-container {
-            max-height: 200px;
-            overflow-y: auto;
-            border: 1px solid #333333;
-            border-radius: 8px;
-            background: #111111;
-            margin-top: 10px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 12px;
-            text-align: left;
-            color: #ffffff;
-        }
-        th, td {
-            padding: 8px;
-            border-bottom: 1px solid #333333;
-        }
-        th {
-            background-color: #1a1a1a;
-            color: #d4af37;
-        }
-        .contact-footer {
-            margin-top: 20px;
-            text-align: center;
-            font-size: 13px;
-            color: #aaaaaa;
-            border-top: 1px dashed #444444;
-            padding-top: 15px;
-        }
-        .telegram-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #0088cc;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
+            gap: 8px;
             text-decoration: none;
-            font-weight: bold;
-            margin-top: 8px;
-            font-size: 13px;
-            transition: background 0.3s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            width: 80%;
         }
-        .telegram-btn img {
-            width: 18px;
-            height: 18px;
-            margin-right: 8px;
-        }
-        .telegram-btn:hover {
+        .submit-receipt-btn:hover {
             background-color: #006699;
         }
-        .share-btn {
-            background-color: #25D366;
-            margin-top: 8px;
+
+        /* የደንበኞች አስተያየት (Testimonials) ስታይል */
+        .testimonials-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            max-width: 1100px;
+            margin: 0 auto;
         }
-        .share-btn:hover {
-            background-color: #1EBE5D;
+        .testimonial-card {
+            background-color: #1f1f1f;
+            border: 1px solid #333;
+            padding: 25px;
+            width: 320px;
+            border-radius: 10px;
+            text-align: left;
+            position: relative;
         }
-        .admin-btn {
-            background: none;
-            border: none;
-            color: #cccccc;
-            font-size: 12px;
-            cursor: pointer;
-            text-decoration: underline;
-            margin-top: 15px;
-            display: block;
-            width: 100%;
-            text-align: center;
+        .testimonial-card p {
+            color: #ddd;
+            font-style: italic;
+            margin-bottom: 15px;
         }
-        .modal {
-            display: none;
+        .testimonial-card h4 {
+            color: #d4af37;
+            font-size: 16px;
+        }
+        .stars {
+            color: #f3c653;
+            margin-bottom: 10px;
+        }
+        /* ተንሳፋፊ የቴሌግራም ቁልፍ (Floating Telegram Button) */
+        .floating-telegram {
             position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.9);
+            bottom: 30px;
+            right: 30px;
+            background-color: #0088cc;
+            color: #ffffff;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
             justify-content: center;
             align-items: center;
+            font-size: 30px;
+            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.5);
+            z-index: 2000;
+            transition: 0.3s;
+            text-decoration: none;
         }
-        .modal-content {
-            background: #111111;
-            border: 2px solid #d4af37;
-            padding: 20px;
-            border-radius: 12px;
-            max-width: 90%;
-            max-height: 90%;
-            text-align: center;
+        .floating-telegram:hover {
+            background-color: #006699;
+            transform: scale(1.1);
         }
-        .modal-content img {
-            max-width: 100%;
-            max-height: 400px;
-            border-radius: 6px;
+
+        .rules-container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: left;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
         }
-        .close-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        .msg-box {
-            text-align: center;
-            padding: 25px;
-            background: #1a1a1a;
+        .rules-card {
+            background-color: #1f1f1f;
+            padding: 30px;
             border-radius: 10px;
-            border: 1px solid #d4af37;
+            border: 1px solid #333;
+            border-top: 4px solid #d4af37;
+        }
+        .rules-card h3 {
+            color: #d4af37;
+            margin-bottom: 15px;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .rules-card ul {
+            list-style-type: none;
+        }
+        .rules-card ul li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 20px;
+            color: #ddd;
+        }
+        .rules-card ul li::before {
+            content: "✔";
+            position: absolute;
+            left: 0;
+            color: #d4af37;
+        }
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+        }
+        .faq-item {
+            background-color: #1f1f1f;
+            margin-bottom: 15px;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        .faq-item h4 {
+            color: #d4af37;
+            margin-bottom: 8px;
+        }
+        footer {
+            text-align: center;
+            padding: 30px;
+            background-color: #000;
+            color: #777;
+            border-top: 1px solid #222;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- የሚንቀሳቀስ ጽሑፍ -->
-        <div class="marquee-box">
-            <marquee behavior="scroll" direction="left">🚗 🎊 ሂኒቾ የመኪና ዕጣ ይሞክሩ ይሸለሙ! 🎊 🚗</marquee>
+    <!-- ተንሳፋፊ የቴሌግራም ቁልፍ (Floating Telegram Button) -->
+    <a href="https://t.me/Meikds" class="floating-telegram" target="_blank" title="በቴሌግራም ያግኙን">
+        <i class="fab fa-telegram-plane"></i>
+    </a>
+
+    <header>
+        <div class="logo">Mekdes VIP</div>
+        <div class="header-right">
+            <nav id="navMenu">
+                <a href="#" class="t-home">መነሻ</a>
+                <a href="#packages" class="t-services">አገልግሎቶች</a>
+                <a href="#payment" class="t-payment-nav">ክፍያ</a>
+                <a href="#testimonials" class="t-reviews-nav">ምስክርነት</a>
+                <a href="#rules" class="t-rules">ህግ እና ደንብ</a>
+                <a href="#contact" class="t-contact">ያግኙን</a>
+            </nav>
+            <!-- ቋንቋ መቀየሪያ ቁልፍ -->
+            <button class="lang-switch" onclick="toggleLanguage()" id="langBtn">EN / አማ</button>
         </div>
+    </header>
 
-        <h2>🚗 ሂኒቾ የመኪና ዕጣ</h2>
-        <div class="subtitle">ህይወትዎን የሚቀይር አስደናቂ ዕድል!</div>
+    <!-- ከላይ የሚቀሳቀስ ማስታወቂያ (Marquee) -->
+    <div class="marquee-container">
+        <marquee behavior="scroll" direction="left" scrollamount="5">
+            🔥 <span class="t-marquee-text">Mekdes VIP 100 - ልዩ እና ጥራቱን የጠበቀ የቪአይፒ መዝናኛ አገልግሎት በታማኝነት እና በፍጥነት እናቀርባለን! አሁኑኑ በቴሌግራም ያግኙን!</span> 🔥
+        </marquee>
+    </div>
 
-        <!-- የሰዓት መቁጠሪያ (Countdown Timer) -->
-        <div class="timer-box">
-            <div class="timer-title">⏳ ዕጣው የሚዘጋበት የቀረ ጊዜ</div>
-            <div id="countdown">ጫን በመጫን ላይ...</div>
+    <!-- መነሻ (Hero Section) -->
+    <section class="hero">
+        <div class="status-badge" id="statusText">✅ በመስመር ላይ እንገኛለን (Online)</div>
+        <h1>Mekdes VIP</h1>
+        <p class="t-hero-desc">ልዩ እና ጥራት ያለው የቪአይፒ መዝናኛ አገልግሎት በፈለጉበት ሰዓት ከእኛ ዘንድ ያገኛሉ።</p>
+        <div>
+            <a href="https://t.me/Meikds" class="btn" target="_blank">
+                <i class="fab fa-telegram-plane"></i> <span class="t-tg-btn">በቴሌግራም ያግኙን (Channel)</span>
+            </a>
+            <a href="tel:+447776862446" class="btn btn-secondary">
+                <i class="fas fa-phone"></i> <span class="t-call-btn">በስልክ ይደውሉ</span>
+            </a>
         </div>
+    </section>
 
-        <!-- 1. የምዝገባ ፎርም -->
-        <div id="formSection">
-            <!-- ማሳሰቢያ -->
-            <div class="notice-box">
-                ⚠️ <b>ማሳሰቢያ፦</b> ዕጣ ቁጥር ሲመረጡ እና ስልክ ቁጥር ሲያስገቡ ትክክለኛ መረጃ መሆኑን በጥንቃቄ ያረጋግጡ!
+    <!-- የቪአይፒ አገልግሎቶች እና የዋጋ ዝርዝር -->
+    <section class="packages" id="packages">
+        <h2 class="t-pkg-title">የቪአይፒ አገልግሎቶች እና ዋጋ</h2>
+        <div class="package-container">
+            <!-- Video Sex -->
+            <div class="package-card">
+                <h3>Video Sex</h3>
+                <div class="price">2,500 ብር (ETB)</div>
+                <div class="price-usd">15 ዶላር ($15)</div>
+                <p class="t-p1">ልዩ እና ጥራቱን የጠበቀ የቪዲዮ መዝናኛ አገልግሎት።</p>
+                <br>
+                <a href="https://t.me/Meikds" class="btn" target="_blank">
+                    <i class="fab fa-telegram-plane"></i> <span class="t-order">አሁን ይዘዙ</span>
+                </a>
             </div>
 
-            <!-- የቀሪ ቁጥሮች ዝርዝር ማሳያ -->
-            <div class="available-numbers-box">
-                <div class="available-numbers-title">💡 የቀሩት ክፍት ዕጣ ቁጥሮች</div>
-                <div id="numbersList"></div>
+            <!-- Video Sex Call -->
+            <div class="package-card" style="border-color: #d4af37;">
+                <h3>Video Sex Call</h3>
+                <div class="price">4,000 ብር (ETB)</div>
+                <div class="price-usd">25 ዶላር ($25)</div>
+                <p class="t-p2">ቀጥታ የቪዲዮ ጥሪ (Live Video Call) የላቀ እና ግላዊ መዝናኛ።</p>
+                <br>
+                <a href="https://t.me/Meikds" class="btn" target="_blank">
+                    <i class="fab fa-telegram-plane"></i> <span class="t-order">አሁን ይዘዙ</span>
+                </a>
             </div>
 
-            <div class="prizes-box">
-                <h4>🏆 የዕጣው ሽልማቶች</h4>
-                <ul>
-                    <li><strong>1ኛ ዕጣ:</strong> Chevrolet 2022 መኪና</li>
-                    <li><strong>2ኛ ዕጣ:</strong> 100,000.00 ብር</li>
-                    <li><strong>3ኛ ዕጣ:</strong> 50,000.00 ብር</li>
+            <!-- Chat Sex -->
+            <div class="package-card">
+                <h3>Chat Sex</h3>
+                <div class="price">1,500 ብር (ETB)</div>
+                <div class="price-usd">10 ዶላር ($10)</div>
+                <p class="t-p3">በጽሁፍ የሚደረግ ምቹ እና ሚስጥራዊ የቻት መዝናኛ።</p>
+                <br>
+                <a href="https://t.me/Meikds" class="btn" target="_blank">
+                    <i class="fab fa-telegram-plane"></i> <span class="t-order">አሁን ይዘዙ</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- የክፍያ አማራጭ ክፍል እና ደረሰኝ ማላኪያ (Payment & Receipt Section) -->
+    <section class="payment-section" id="payment">
+        <h2 class="t-pay-main-title">የክፍያ አማራጭ እና ደረሰኝ ማረጋገጫ</h2>
+        <div class="payment-container">
+            <div class="payment-card">
+                <h3 class="t-pay-card-title"><i class="fas fa-university"></i> ንግድ ባንክ (CBE)</h3>
+                <p class="payment-info"><span class="t-lbl-acc">የሂሳብ ቁጥር (Account):</span> <br><strong>1000744346747</strong></p>
+                <p class="payment-info"><span class="t-lbl-name">የስርጭት ስም (Name):</span> <br><strong>Mekdes Temsgen</strong></p>
+                <p style="color: #aaa; font-size: 14px; margin-top: 15px;" class="t-pay-note">⚠ ክፍያ ከፈጸሙ በኋላ ደረሰኙን (Screenshot) ከታች አስገብተው በቴሌግራም ይላኩልን።</p>
+                
+                <!-- የደረሰኝ ማዕቀፍ (Receipt Upload Area) -->
+                <div class="receipt-form-group">
+                    <label for="receiptFile" class="t-receipt-label"><i class="fas fa-receipt"></i> የክፍያ ደረሰኝ (Screenshot) ያስገቡ:</label>
+                    <input type="file" id="receiptFile" accept="image/*" class="file-input">
+                    <button type="button" class="submit-receipt-btn" onclick="sendReceiptToTelegram()">
+                        <i class="fab fa-telegram-plane"></i> <span class="t-receipt-btn-text">ደረሰኝ ልኮ አገልግሎቱን አረጋግጥ</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- የደንበኞች ምስክርነት / አስተያየት (Testimonials Section) -->
+    <section class="testimonials-section" id="testimonials">
+        <h2 class="t-testi-title">የደንበኞች አስተያየት</h2>
+        <div class="testimonials-container">
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p class="t-test1">"በጣም አሪፍ እና ታማኝ አገልግሎት ነው! በሰዓቱ አግኝቼዋለሁ። በጣም አመሰግናለሁ።"</p>
+                <h4>- ዳዊት (አዲስ አበባ)</h4>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p class="t-test2">"ግላዊነት (Privacy) በሚገባ የተጠበቀ ነው። ፈጣን እና ጥራቱን የጠበቀ አሰራር አላቸው።"</p>
+                <h4>- ማርክ (አድማጭ)</h4>
+            </div>
+        </div>
+    </section>
+
+    <!-- ህግ እና ደንብ እንዲሁም ታማኝነት ክፍል -->
+    <section class="rules-section" id="rules">
+        <h2 class="t-rules-main-title">ህግ፣ ደንብ እና ታማኝነት</h2>
+        <div class="rules-container">
+            <!-- ህግ እና ደንብ -->
+            <div class="rules-card">
+                <h3 class="t-rule-h1"><i class="fas fa-gavel"></i> ህግ እና ደንብ</h3>
+                <ul class="t-rule-list1">
+                    <li>ክፍያ ቅድሚያ (Prepayment) የሚፈጸምበት ነው። ክፍያ ሳይረጋገጥ አገልግሎት አይጀመርምም።</li>
+                    <li>በአገልግሎት ሰዓት ውስጥ አክብሮት እና ስነ-ስርዓት መጠበቅ ግዴታ ነው።</li>
+                    <li>የማንኛውም አገልግሎት ቅጂ (Screen Recording ወይም ፎቶ ማንሳት) በጥብቅ የተከለከለ ነው።</li>
+                    <li>ህጉን የሚተላለፍ ደንበኛ ያለ ማስጠንቀቂያ ከግሩፓችን እና አግልግሎታችን ይታገዳል።</li>
                 </ul>
             </div>
 
-            <!-- ተደጋጋሚ ጥያቄዎች (FAQ) -->
-            <div class="faq-box">
-                <h4>❓ ተደጋጋሚ ጥያቄዎች (FAQ)</h4>
-                <div class="faq-q">1. ክፍያ ከፈጸምኩ በኋላ እንዴት አረጋግጣለሁ?</div>
-                <div class="faq-a">የባንክ ደረሰኝዎን (Screenshot) አስገብተው "ምዝገባ አጠናቅ" የሚለውን ሲጫኑ በአድሚን በኩል ተጣርቶ ቁጥርዎ በሰላም ይያዝልዎታል።</div>
-                <div class="faq-q">2. ዕጣው የሚወጣበት ቀን ማስተላለፍ ይቻላል?</div>
-                <div class="faq-a">አይቻልም፤ ከተቀመጠው የሰዓት ገደብ ማብቂያ በኋላ በቀጥታ በቴሌግራም ግሩፓችን የላይቭ ስርጭት ይፋ ይሆናል።</div>
-            </div>
-
-            <div class="ticket-info">
-                🎫 የቲኬት ዋጋ፦ 2,500 ብር
-            </div>
-            
-            <form id="lotteryForm" onsubmit="proceedToPayment(event)">
-                <div class="form-group">
-                    <label for="luckyNumber">የመረጡት ዕጣ ቁጥር</label>
-                    <input type="number" id="luckyNumber" placeholder="ከላይ ካሉት ቁጥሮች ይምረጡ" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="fullName">ሙሉ ስም</label>
-                    <input type="text" id="fullName" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="phoneNumber">ስልክ ቁጥር</label>
-                    <input type="tel" id="phoneNumber" required>
-                </div>
-
-                <button type="submit">ወደ ክፍያ አማራጭ ሄድ 💳</button>
-            </form>
-        </div>
-
-        <!-- 2. የክፍያ አማራጭ እና ደረሰኝ ማስገቢያ ገጽ -->
-        <div id="paymentSection" class="payment-section">
-            <div class="payment-box">
-                <h3>💳 የክፍያ አማራጮች</h3>
-                <p style="font-size: 13px; text-align: center; margin-top: 0; color: #cccccc;">እባክዎ የ 2,500 ብር ክፍያ ከታች ባሉት የባንክ ሂሳቦች ይፈጽሙ፡</p>
-                
-                <div class="bank-item">
-                    🏦 <b>የኢትዮጵያ ንግድ ባንክ (CBE):</b><br> 1000302209824
-                </div>
-                <div class="bank-item">
-                    🏦 <b>አቢሲኒያ ባንክ (Bank of Abyssinai):</b><br> 108217537
-                </div>
-                <div class="bank-item">
-                    🏦 <b>አዋሽ ባንክ (Awash Bank):</b><br> 01347948725300
-                </div>
-
-                <div class="account-name">
-                    👤 ስም (NAME): Hanna Dessalgn Genetu
-                </div>
-
-                <div class="receipt-upload">
-                    <label for="receiptFile" style="color: #d4af37; font-size: 13px;">📄 የክፍያ ደረሰኝ (Screenshot) ያስገቡ፦</label>
-                    <input type="file" id="receiptFile" accept="image/*" required style="border: none; padding: 5px 0; background: transparent;">
-                </div>
-            </div>
-
-            <button onclick="completeRegistration()" style="background: #28a745; color: white;">ክፍያ ፈጽሜያለሁ (ምዝገባ አጠናቅ)</button>
-            <button onclick="goBack()" style="background: #444444; color: white; margin-top: 8px;">← ተመለስ</button>
-        </div>
-
-        <!-- 3. ተጠቃሚው ደረሰኝ ሲልክ የሚጠብቅበት ገጽ -->
-        <div id="waitingSection" class="waiting-section">
-            <div class="msg-box">
-                <h3 style="color: #d4af37;">⏳ እባክዎ ትንሽ ይጠብቁ</h3>
-                <p style="font-size: 14px; color: #cccccc;">የክፍያ ደረሰኝዎ በአድሚን እየተጣራ ነው። ሲረጋገጥ ማሳወቂያ ይደርስዎታል።</p>
+            <!-- ታማኝነት -->
+            <div class="rules-card">
+                <h3 class="t-rule-h2"><i class="fas fa-shield-alt"></i> ታማኝነት እና ግላዊነት</h3>
+                <ul class="t-rule-list2">
+                    <li>የደንበኞቻችን ምስጢራዊነት (Privacy) 100% የተጠበቀ እና አስተማማኝ ነው።</li>
+                    <li>የተገባውን ቃል በሰዓቱ እና በጥራት ሙሉ በሙሉ እናከብራለን።</li>
+                    <li>ምንም አይነት የግል መረጃዎ ለሶስተኛ አካል ፈጽሞ አולተላለፍም።</li>
+                    <li>እውነተኛ፣ ፈጣን እና ታማኝ አገልግሎት በቁርጠኝነት እንሰጣለን።</li>
+                </ul>
             </div>
         </div>
+    </section>
 
-        <!-- 4. አድሚን ካረጋገጠ በኋላ ለተጠቃሚው የሚታይ ስኬታማ መልእክት -->
-        <div id="successSection" class="success-section">
-            <div class="msg-box">
-                <h3 style="color: #28a745;">🎉 በተሳካ ሁኔታ ተመዝግቧል!</h3>
-                <p style="font-size: 14px; color: #ffffff;" id="successMsgText"></p>
-                <button onclick="location.reload()" style="margin-top: 15px;">ወደ መጀመሪያው ገጽ ተመለስ</button>
+    <!-- የሚጠየቁ ጥያቄዎች (FAQ) -->
+    <section class="faq">
+        <h2 class="t-faq-title">ብዙ ጊዜ የሚጠየቁ ጥያቄዎች</h2>
+        <div class="faq-container">
+            <div class="faq-item">
+                <h4 class="t-faq-q1">አገልግሎቱን እንዴት ማግኘት እንችላለን?</h4>
+                <p class="t-faq-a1">በቀጥታ በቴሌግራም አድራሻችን @Meikds በማነጋገር ክፍያ ፈጽመው አገልግሎቱን ማግኘት ይችላሉ።</p>
+            </div>
+            <div class="faq-item">
+                <h4 class="t-faq-q2">ግላዊነት (Privacy) ይጠበቃል ወይ?</h4>
+                <p class="t-faq-a2">አዎ! የደንበኞቻችን ምስጢራዊነት እና ግላዊነት 100% ይጠበቃል።</p>
             </div>
         </div>
+    </section>
 
-        <!-- 5. የአድሚን ገጽ -->
-        <div id="adminSection" class="admin-section">
-            <h3 style="color: #d4af37; margin-top: 0; text-align: center;">🔐 የአድሚን መቆጣጠሪያ ፓነል</h3>
-            
-            <div class="admin-number-management">
-                <div class="admin-box-title">⚙️ የዕጣ ቁጥሮች አስተዳደር</div>
-                <div style="display: flex; gap: 5px; margin-bottom: 8px;">
-                    <input type="number" id="newNumberInput" placeholder="አዲስ ቁጥር ያስገቡ" style="padding: 6px; font-size: 13px;">
-                    <button onclick="addNewNumber()" style="width: 100px; padding: 6px; font-size: 12px; margin-top: 0;">ቁጥር አክል</button>
-                </div>
-                <div style="font-size: 11px; color: #aaaaaa; margin-bottom: 5px;">የቀሩ ቁጥሮች (በ ❌ አጥፋ):</div>
-                <div id="adminNumbersList" style="max-height: 80px; overflow-y: auto;"></div>
-            </div>
+    <!-- ማጠቃለያ / ያግኙን (Footer) -->
+    <footer id="contact">
+        <h2>Mekdes VIP</h2>
+        <p style="margin: 10px 0;" class="t-footer-contact">ቴሌግራም አድራሻ: <a href="https://t.me/Meikds" target="_blank" style="color: #d4af37; text-decoration: none;"><i class="fab fa-telegram-plane"></i> @Meikds</a> | ስልክ: +447776862446</p>
+        <p class="t-copy">&copy; 2026 Mekdes VIP. መብቱ በህግ የተጠበቀ ነው።</p>
+    </footer>
 
-            <p style="font-size: 12px; text-align: center; color: #cccccc; margin-bottom: 5px;">የተመዝጋቢዎች ዝርዝር እና የክፍያ ደረሰኞች</p>
-            
-            <div class="table-container">
-                <table id="adminTable">
-                    <thead>
-                        <tr>
-                            <th>ቁጥር</th>
-                            <th>ስም</th>
-                            <th>ስልክ</th>
-                            <th>እርምጃ</th>
-                        </tr>
-                    </thead>
-                    <tbody id="adminTableBody"></tbody>
-                </table>
-            </div>
-
-            <button onclick="logoutAdmin()" style="background: #dc3545; color: white; margin-top: 15px;">ከአድሚን ውጣ (Logout)</button>
-        </div>
-
-        <!-- እውቂያዎች፣ የቴሌግራም ግሩፕ፣ ድጋፍ እና ማጋሪያ አዝራር -->
-        <div class="contact-footer">
-            📞 ስልክ፦ <b>0993277328</b><br>
-            
-            <!-- የቴሌግራም ግሩፕ አዝራር -->
-            <a href="https://t.me/hanichmekinaekubb" target="_blank" class="telegram-btn">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
-                የቴሌግራም ግሩፕ (Telegram Group)
-            </a>
-
-            <!-- የቴሌግራም ድጋፍ አዝራር -->
-            <a href="https://t.me/hanichmekinaekub" target="_blank" class="telegram-btn" style="background-color: #006699;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
-                የቴሌግራም ድጋፍ (Telegram Support)
-            </a>
-
-            <!-- ድረ-ገጹን ለሌሎች የማጋሪያ አዝራር -->
-            <a href="javascript:void(0);" onclick="shareWebsite()" class="telegram-btn share-btn">
-                📤  ለጓደኛ ሼር አድርግ (Share)
-            </a>
-            
-            <button class="admin-btn" onclick="checkAdminPassword()">🔐 አድሚን መግቢያ (Admin Login)</button>
-        </div>
-    </div>
-
-    <!-- የፎቶ ማሳያ ፖፕአፕ (Modal) -->
-    <div id="imageModal" class="modal">
-        <div class="modal-content">
-            <h4 style="margin-top: 0; color: #d4af37;">የክፍያ ደረሰኝ ፎቶ</h4>
-            <img id="modalImage" src="" alt="የክፍያ ደረሰኝ">
-            <br><br>
-            <button id="approveBtn" style="background: #28a745; color: white; margin-bottom: 5px;">✅ ትክክል ነው (አረጋግጥ)</button>
-            <button class="close-btn" onclick="closeModal()">ዝጋ (Close)</button>
-        </div>
-    </div>
-
+    <!-- ስክሪፕቶች -->
     <script>
-        let availableNumbers = [
-            797, 942, 957, 986, 996, 997, 1025, 1038, 1073, 
-            1082, 1100, 1131, 1139, 1155, 1168, 1177, 1178, 
-            1186, 1194, 1200, 1993, 2053, 2055, 2090, 2096, 2138
-        ];
+        let currentLang = 'am';
 
-        let participants = [];
-        let tempParticipant = {};
-        let currentSelectedIndex = null;
-
-        function renderAvailableNumbers() {
-            const container = document.getElementById('numbersList');
-            container.innerHTML = '';
-            if (availableNumbers.length === 0) {
-                container.innerHTML = '<span style="color: #ff4d4d; font-size: 12px;">ሁሉም ቁጥሮች ተይዘዋል!</span>';
-                return;
+        const translations = {
+            am: {
+                home: "መነሻ",
+                services: "አገልግሎቶች",
+                paymentNav: "ክፍያ",
+                reviewsNav: "ምስክርነት",
+                rules: "ህግ እና ደንብ",
+                contact: "ያግኙን",
+                marqueeText: "Mekdes VIP 100 - ልዩ እና ጥራቱን የጠበቀ የቪአይፒ መዝናኛ አገልግሎት በታማኝነት እና በፍጥነት እናቀርባለን! አሁኑኑ በቴሌግራም ያግኙን!",
+                status: "✅ በመስመር ላይ እንገኛለን (Online)",
+                heroDesc: "ልዩ እና ጥራት ያለው የቪአይፒ መዝናኛ አገልግሎት በፈለጉበት ሰዓት ከእኛ ዘንድ ያገኛሉ።",
+                tgBtn: "በቴሌግራም ያግኙን (Channel)",
+                callBtn: "በስልክ ይደውሉ",
+                pkgTitle: "የቪአይፒ አገልግሎቶች እና ዋጋ",
+                p1: "ልዩ እና ጥራቱን የጠበቀ የቪዲዮ መዝናኛ አገልግሎት።",
+                p2: "ቀጥታ የቪዲዮ ጥሪ (Live Video Call) የላቀ እና ግላዊ መዝናኛ።",
+                p3: "በጽሁፍ የሚደረግ ምቹ እና ሚስጥራዊ የቻት መዝናኛ።",
+                order: "አሁን ይዘዙ",
+                payMainTitle: "የክፍያ አማራጭ እና ደረሰኝ ማረጋገጫ",
+                payCardTitle: "ንግድ ባንክ (CBE)",
+                lblAcc: "የሂሳብ ቁጥር (Account):",
+                lblName: "የስርጭት ስም (Name):",
+                payNote: "⚠ ክፍያ ከፈጸሙ በኋላ ደረሰኙን (Screenshot) ከታች አስገብተው በቴሌግራም ይላኩልን።",
+                receiptLabel: "የክፍያ ደረሰኝ (Screenshot) ያስገቡ:",
+                receiptBtnText: "ደረሰኝ ልኮ አገልግሎቱን አረጋግጥ",
+                testiTitle: "የደንበኞች አስተያየት",
+                test1: "\"በጣም አሪፍ እና ታማኝ አገልግሎት ነው! በሰዓቱ አግኝቼዋለሁ። በጣም አመሰግናለሁ።\"",
+                test2: "\"ግላዊነት (Privacy) በሚገባ የተጠበቀ ነው። ፈጣን እና ጥራቱን የጠበቀ አሰራር አላቸው።\"",
+                rulesTitle: "ህግ፣ ደንብ እና ታማኝነት",
+                ruleH1: "ህግ እና ደንብ",
+                ruleL1: [
+                    "ክፍያ ቅድሚያ (Prepayment) የሚፈጸምበት ነው። ክፍያ ሳይረጋገጥ አገልግሎት አይጀመርምም።",
+                    "በአገልግሎት ሰዓት ውስጥ አክብሮት እና ስነ-ስርዓት መጠበቅ ግዴታ ነው።",
+                    "የማንኛውም አገልግሎት ቅጂ (Screen Recording ወይም ፎቶ ማንሳት) በጥብቅ የተከለከለ ነው።",
+                    "ህጉን የሚተላለፍ ደንበኛ ያለ ማስጠንቀቂያ ከግሩፓችን እና አግልግሎታችን ይታገዳል።"
+                ],
+                ruleH2: "ታማኝነት እና ግላዊነት",
+                ruleL2: [
+                    "የደንበኞቻችን ምስጢራዊነት (Privacy) 100% የተጠበቀ እና አስተማማኝ ነው።",
+                    "የተገባውን ቃል በሰዓቱ እና በጥራት ሙሉ በሙሉ እናከብራለን።",
+                    "ምንም አይነት የግል መረጃዎ ለሶስተኛ አካል ፈጽሞ አולተላለፍም።",
+                    "እውነተኛ፣ ፈጣን እና ታማኝ አገልግሎት በቁርጠኝነት እንሰጣለን።"
+                ],
+                faqTitle: "ብዙ ጊዜ የሚጠየቁ ጥያቄዎች",
+                faqQ1: "አገልግሎቱን እንዴት ማግኘት እንችላለን?",
+                faqA1: "በቀጥታ በቴሌግራም አድራሻችን @Meikds በማነጋገር ክፍያ ፈጽመው አገልግሎቱን ማግኘት ይችላሉ።",
+                faqQ2: "ግላዊነት (Privacy) ይጠበቃል ወይ?",
+                faqA2: "አዎ! የደንበኞቻችን ምስጢራዊነት እና ግላዊነት 100% ይጠበቃል።",
+                footerContact: "ቴሌግራም አድራሻ: <a href='https://t.me/Meikds' target='_blank' style='color: #d4af37; text-decoration: none;'><i class='fab fa-telegram-plane'></i> @Meikds</a> | ስልክ: +447776862446",
+                copy: "&copy; 2026 Mekdes VIP. መብቱ በህግ የተጠበቀ ነው።"
+            },
+            en: {
+                home: "Home",
+                services: "Services",
+                paymentNav: "Payment",
+                reviewsNav: "Reviews",
+                rules: "Rules & Policy",
+                contact: "Contact Us",
+                marqueeText: "Mekdes VIP 100 - Exclusive and high-quality VIP entertainment services delivered with trust and speed! Contact us on Telegram now!",
+                status: "✅ We are online and available",
+                heroDesc: "Get exclusive and high-quality VIP entertainment services whenever you want.",
+                tgBtn: "Contact on Telegram (Channel)",
+                callBtn: "Call Phone",
+                pkgTitle: "VIP Services & Pricing",
+                p1: "Exclusive and high-quality video entertainment service.",
+                p2: "Live Video Call for a superior and private entertainment experience.",
+                p3: "Convenient and confidential chat entertainment service.",
+                order: "Book Now",
+                payMainTitle: "Payment Method & Receipt Verification",
+                payCardTitle: "Commercial Bank of Ethiopia (CBE)",
+                lblAcc: "Account Number:",
+                lblName: "Account Name:",
+                payNote: "⚠ After making the payment, please attach your receipt (Screenshot) below and send it on Telegram.",
+                receiptLabel: "Upload Payment Receipt (Screenshot):",
+                receiptBtnText: "Send Receipt & Confirm Service",
+                testiTitle: "Customer Testimonials",
+                test1: "\"Very cool and reliable service! Got it on time. Thank you very much.\"",
+                test2: "\"Privacy is well protected. Fast and high-quality service process.\"",
+                rulesTitle: "Rules, Policy & Trust",
+                ruleH1: "Rules & Regulations",
+                ruleL1: [
+                    "Prepayment is required before any service starts.",
+                    "Maintaining respect and discipline during service hours is mandatory.",
+                    "Screen recording or taking photos of any service is strictly prohibited.",
+                    "Any client violating the rules will be banned without warning."
+                ],
+                ruleH2: "Trust & Privacy",
+                ruleL2: [
+                    "Our clients' privacy is 100% protected and secure.",
+                    "We fully respect our promises on time and with high quality.",
+                    "Your personal information will never be shared with third parties.",
+                    "We are committed to delivering authentic, fast, and reliable service."
+                ],
+                faqTitle: "Frequently Asked Questions",
+                faqQ1: "How can I get the service?",
+                faqA1: "You can get the service by contacting us directly on our Telegram @Meikds and completing the payment.",
+                faqQ2: "Is privacy protected?",
+                faqA2: "Yes! Our clients' confidentiality and privacy are 100% protected.",
+                footerContact: "Telegram: <a href='https://t.me/Meikds' target='_blank' style='color: #d4af37; text-decoration: none;'><i class='fab fa-telegram-plane'></i> @Meikds</a> | Phone: +447776862446",
+                copy: "&copy; 2026 Mekdes VIP. All rights reserved."
             }
-            availableNumbers.forEach(num => {
-                const span = document.createElement('span');
-                span.className = 'number-tag';
-                span.innerText = num;
-                span.onclick = function() {
-                    document.getElementById('luckyNumber').value = num;
-                };
-                container.appendChild(span);
-            });
-            renderAdminNumbersList();
-        }
-
-        function renderAdminNumbersList() {
-            const adminContainer = document.getElementById('adminNumbersList');
-            adminContainer.innerHTML = '';
-            if (availableNumbers.length === 0) {
-                adminContainer.innerHTML = '<span style="color: #aaaaaa; font-size: 11px;">ምንም ቁጥር የለም</span>';
-                return;
-            }
-            availableNumbers.forEach(num => {
-                const tag = document.createElement('span');
-                tag.className = 'admin-num-tag';
-                tag.innerHTML = `${num} <span onclick="removeNumber(${num})" title="አጥፋ">❌</span>`;
-                adminContainer.appendChild(tag);
-            });
-        }
-
-        function removeNumber(num) {
-            if (confirm(`ቁጥር ${num} ከዝርዝር ውስጥ ማጥፋት ይፈልጋሉ?`)) {
-                availableNumbers = availableNumbers.filter(n => n !== num);
-                renderAvailableNumbers();
-            }
-        }
-
-        function addNewNumber() {
-            const input = document.getElementById('newNumberInput');
-            const val = parseInt(input.value.trim());
-            if (isNaN(val)) {
-                alert('እባክዎ ትክክለኛ ቁጥር ያስገቡ!');
-                return;
-            }
-            if (availableNumbers.includes(val)) {
-                alert('ይህ ቁጥር አስቀድሞ በዝርዝሩ ውስጥ አለ!');
-                return;
-            }
-            availableNumbers.push(val);
-            availableNumbers.sort((a, b) => a - b);
-            input.value = '';
-            renderAvailableNumbers();
-            alert(`ቁጥር ${val} በተሳካ ሁኔታ ተጨመረ!`);
-        }
-
-        // የሰዓት መቁጠሪያ (Countdown Timer)
-        const countdownDate = new Date().getTime() + (3 * 24 * 60 * 60 * 1000);
-        const timerInterval = setInterval(function() {
-            const now = new Date().getTime();
-            const distance = countdownDate - now;
-
-            if (distance < 0) {
-                clearInterval(timerInterval);
-                document.getElementById("countdown").innerHTML = "ጊዜው አልቋል!";
-                return;
-            }
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById("countdown").innerHTML = 
-                days + " ቀን : " + hours + " ሰዓት : " + minutes + " ደቂቃ : " + seconds + " ሰከንድ";
-        }, 1000);
-
-        function proceedToPayment(event) {
-            event.preventDefault();
-            const selectedNum = parseInt(document.getElementById('luckyNumber').value.trim());
-
-            if (!availableNumbers.includes(selectedNum)) {
-                alert('የመረጡት ቁጥር ከቀሪዎቹ ዝርዝር ውስጥ የለም ወይም ተይዟል። እባክዎ ትክክለኛ ቁጥር ይምረጡ!');
-                return;
-            }
-
-            tempParticipant = {
-                number: selectedNum,
-                name: document.getElementById('fullName').value.trim(),
-                phone: document.getElementById('phoneNumber').value.trim(),
-                status: 'pending'
-            };
-
-            document.getElementById('formSection').style.display = 'none';
-            document.getElementById('paymentSection').style.display = 'block';
-        }
-
-        function completeRegistration() {
-            const receiptInput = document.getElementById('receiptFile');
-            
-            if (receiptInput.files.length === 0) {
-                alert('እባክዎ የክፍያ ደረሰኝዎን (Screenshot) ያስገቡ!');
-                return;
-            }
-
-            const file = receiptInput.files[0];
-            const reader = new FileReader();
-
-            reader.onload = function(e) {
-                tempParticipant.receiptUrl = e.target.result;
-                participants.push(tempParticipant);
-
-                availableNumbers = availableNumbers.filter(n => n !== parseInt(tempParticipant.number));
-                renderAvailableNumbers();
-                updateAdminTable();
-
-                document.getElementById('paymentSection').style.display = 'none';
-                document.getElementById('waitingSection').style.display = 'block';
-            };
-
-            reader.readAsDataURL(file);
-        }
-
-        function goBack() {
-            document.getElementById('paymentSection').style.display = 'none';
-            document.getElementById('formSection').style.display = 'block';
-        }
-
-        function checkAdminPassword() {
-            const password = prompt("እባክዎ የአድሚን የሚስጥር ቁጥር ያስገቡ:");
-            if (password === "1919") {
-                document.getElementById('formSection').style.display = 'none';
-                document.getElementById('paymentSection').style.display = 'none';
-                document.getElementById('waitingSection').style.display = 'none';
-                document.getElementById('successSection').style.display = 'none';
-                document.getElementById('adminSection').style.display = 'block';
-            } else if (password !== null) {
-                alert('የተሳሳተ የሚስጥር ቁጥር ነው!');
-            }
-        }
-
-        function logoutAdmin() {
-            document.getElementById('adminSection').style.display = 'none';
-            document.getElementById('formSection').style.display = 'block';
-        }
-
-        function updateAdminTable() {
-            const adminTableBody = document.getElementById('adminTableBody');
-            adminTableBody.innerHTML = '';
-
-            participants.forEach((p, index) => {
-                const row = document.createElement('tr');
-                let statusText = p.status === 'approved' ? '<span style="color: #28a745; font-weight: bold;">✔ ተረጋግጧል</span>' : '<button onclick="viewReceipt(\'' + index + '\')" style="background: #0088cc; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;">ፎቶ አሳይ & አረጋግጥ</button>';
-                
-                row.innerHTML = `
-                    <td><strong>${p.number}</strong></td>
-                    <td>${p.name}</td>
-                    <td>${p.phone}</td>
-                    <td>${statusText}</td>
-                `;
-                adminTableBody.appendChild(row);
-            });
-        }
-
-        function viewReceipt(index) {
-            currentSelectedIndex = index;
-            const modal = document.getElementById('imageModal');
-            const modalImg = document.getElementById('modalImage');
-            modalImg.src = participants[index].receiptUrl;
-            
-            const approveBtn = document.getElementById('approveBtn');
-            if (participants[index].status === 'approved') {
-                approveBtn.style.display = 'none';
-            } else {
-                approveBtn.style.display = 'block';
-                approveBtn.onclick = function() {
-                    approveParticipant(index);
-                };
-            }
-
-            modal.style.display = 'flex';
-        }
-
-        function approveParticipant(index) {
-            participants[index].status = 'approved';
-            updateAdminTable();
-            closeModal();
-            
-            if (tempParticipant === participants[index]) {
-                document.getElementById('waitingSection').style.display = 'none';
-                document.getElementById('successSection').style.display = 'block';
-                document.getElementById('successMsgText').innerHTML = `የእርስዎ የዕጣ ቁጥር <b>${participants[index].number}</b> በደንብ ተይዞልዎታል! እናመሰግናለን።`;
-                
-                confetti({
-                    particleCount: 120,
-                    spread: 80,
-                    origin: { y: 0.6 }
-                });
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('imageModal').style.display = 'none';
-        }
-
-        function shareWebsite() {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'ሂኒቾ የመኪና ዕጣ',
-                    text: 'የሂኒቾ የመኪና ዕጣ ላይ በመሳተፍ Chevrolet መኪና እና የገንዘብ ሽልማቶችን ያሸንፉ!',
-                    url: window.location.href,
-                }).catch(() => {});
-            } else {
-                alert('ሊንኩ ተገልብጧል (Copied)! ለጓደኛዎ ማጋራት ይችላሉ።');
-            }
-        }
-
-        window.onload = function() {
-            renderAvailableNumbers();
         };
+
+        function sendReceiptToTelegram() {
+            let fileInput = document.getElementById('receiptFile');
+            if (fileInput.files.length === 0) {
+                alert(currentLang === 'am' ? 'እባክዎ መጀመሪያ የክፍያ ደረሰኝ (Screenshot) ፎቶ ይምረጡ!' : 'Please select a payment receipt photo first!');
+            } else {
+                let fileName = fileInput.files[0].name;
+                alert((currentLang === 'am' ? 'የተመረጠው ደረሰኝ ፋይል (' + fileName + ') ተይዟል። አሁን ወደ ቴሌግራም አድራሻችን (https://t.me/Meikds) እንመራዎታለን። እባክዎ ፋይሉን እዚያ ፔስት (Paste) አድርገው ይላኩ!' : 'Selected receipt (' + fileName + ') attached. Redirecting to our Telegram (https://t.me/Meikds). Please paste and send it there!'));
+                window.open('https://t.me/Meikds', '_blank');
+            }
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'am' ? 'en' : 'am';
+            let t = translations[currentLang];
+
+            document.querySelector('.t-home').innerText = t.home;
+            document.querySelector('.t-services').innerText = t.services;
+            document.querySelector('.t-payment-nav').innerText = t.paymentNav;
+            document.querySelector('.t-reviews-nav').innerText = t.reviewsNav;
+            document.querySelector('.t-rules').innerText = t.rules;
+            document.querySelector('.t-contact').innerText = t.contact;
+            document.querySelector('.t-marquee-text').innerText = t.marqueeText;
+            document.getElementById('statusText').innerText = t.status;
+            document.querySelector('.t-hero-desc').innerText = t.heroDesc;
+            document.querySelector('.t-tg-btn').innerText = t.tgBtn;
+            document.querySelector('.t-call-btn').innerText = t.callBtn;
+            document.querySelector('.t-pkg-title').innerText = t.pkgTitle;
+            document.querySelector('.t-p1').innerText = t.p1;
+            document.querySelector('.t-p2').innerText = t.p2;
+            document.querySelector('.t-p3').innerText = t.p3;
+            
+            document.querySelectorAll('.t-order').forEach(el => el.innerText = t.order);
+
+            document.querySelector('.t-pay-main-title').innerText = t.payMainTitle;
+            document.querySelector('.t-pay-card-title').innerHTML = `<i class="fas fa-university"></i> ${t.payCardTitle}`;
+            document.querySelector('.t-lbl-acc').innerText = t.lblAcc;
+            document.querySelector('.t-lbl-name').innerText = t.lblName;
+            document.querySelector('.t-pay-note').innerText = t.payNote;
+            document.querySelector('.t-receipt-label').innerHTML = `<i class="fas fa-receipt"></i> ${t.receiptLabel}`;
+            document.querySelector('.t-receipt-btn-text').innerText = t.receiptBtnText;
+
+            document.querySelector('.t-testi-title').innerText = t.testiTitle;
+            document.querySelector('.t-test1').innerText = t.test1;
+            document.querySelector('.t-test2').innerText = t.test2;
+
+            document.querySelector('.t-rules-main-title').innerText = t.rulesTitle;
+            document.querySelector('.t-rule-h1').innerHTML = `<i class="fas fa-gavel"></i> ${t.ruleH1}`;
+            document.querySelector('.t-rule-h2').innerHTML = `<i class="fas fa-shield-alt"></i> ${t.ruleH2}`;
+
+            let list1 = document.querySelectorAll('.t-rule-list1 li');
+            t.ruleL1.forEach((text, index) => { if(list1[index]) list1[index].innerText = text; });
+
+            let list2 = document.querySelectorAll('.t-rule-list2 li');
+            t.ruleL2.forEach((text, index) => { if(list2[index]) list2[index].innerText = text; });
+
+            document.querySelector('.t-faq-title').innerText = t.faqTitle;
+            document.querySelector('.t-faq-q1').innerText = t.faqQ1;
+            document.querySelector('.t-faq-a1').innerText = t.faqA1;
+            document.querySelector('.t-faq-q2').innerText = t.faqQ2;
+            document.querySelector('.t-faq-a2').innerText = t.faqA2;
+
+            document.querySelector('.t-footer-contact').innerHTML = t.footerContact;
+            document.querySelector('.t-copy').innerHTML = t.copy;
+
+            document.getElementById('langBtn').innerText = currentLang === 'am' ? 'EN / አማ' : 'አማ / EN';
+        }
     </script>
 
 </body>
