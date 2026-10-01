@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ሂኒቾ የመኪና ዕጣ</title>
+    <!-- የቀለም ርጭት (Confetti) ላይብረሪ ከቀላል ስክሪፕት ጋር -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: #111111;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.2);
+            width: 100%;
+            max-width: 480px;
+            border: 2px solid #d4af37;
+        }
+        .marquee-box {
+            background: #d4af37;
+            color: #000000;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            white-space: nowrap;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+        }
+        h2 {
+            color: #d4af37;
+            text-align: center;
+            margin-bottom: 5px;
+            font-size: 26px;
+            letter-spacing: 0.5px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #cccccc;
+            margin-bottom: 15px;
+        }
+        /* የሰዓት መቁጠሪያ ዲዛይን */
+        .timer-box {
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid #d4af37;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .timer-title {
+            font-size: 12px;
+            color: #d4af37;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        #countdown {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 1px;
+        }
+        .notice-box {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px dashed #d4af37;
+            color: #f3e5ab;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            text-align: center;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        .prizes-box {
+            background: #1a1a1a;
+            border: 1px solid #d4af37;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .prizes-box h4 {
+            margin: 0 0 10px 0;
+            color: #d4af37;
+            text-align: center;
+            font-size: 16px;
+            border-bottom: 1px dashed rgba(212, 175, 55, 0.4);
+            padding-bottom: 5px;
+        }
+        .prizes-box ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #e5e5e5;
+        }
+        .prizes-box li {
+            margin-bottom: 6px;
+        }
+        /* ተደጋጋሚ ጥያቄዎች (FAQ) */
+        .faq-box {
+            background: #1a1a1a;
+            border: 1px solid #d4af37;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+        .faq-box h4 {
+            margin: 0 0 10px 0;
+            color: #d4af37;
+            text-align: center;
+            font-size: 15px;
+            border-bottom: 1px dashed rgba(212, 175, 55, 0.4);
+            padding-bottom: 5px;
+        }
+        .faq-q {
+            font-weight: bold;
+            color: #f3e5ab;
+            margin-top: 8px;
+        }
+        .faq-a {
+            color: #cccccc;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        .available-numbers-box {
+            background: #1a1a1a;
+            border: 1px solid #d4af37;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 15px;
+            max-height: 100px;
+            overflow-y: auto;
+            text-align: center;
+        }
+        .available-numbers-title {
+            font-size: 12px;
+            color: #d4af37;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .number-tag {
+            display: inline-block;
+            background: #333333;
+            color: #f3e5ab;
+            padding: 3px 8px;
+            margin: 2px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            border: 1px solid #d4af37;
+            cursor: pointer;
+        }
+        .ticket-info {
+            text-align: center;
+            font-weight: bold;
+            color: #000000;
+            margin-bottom: 20px;
+            font-size: 16px;
+            background: #d4af37;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #d4af37;
+            font-size: 13px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #444444;
+            background: #1a1a1a;
+            color: #ffffff;
+            border-radius: 8px;
+            font-size: 15px;
+            box-sizing: border-box;
+            transition: all 0.3s;
+        }
+        input:focus {
+            border-color: #d4af37;
+            outline: none;
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+        }
+        button {
+            background: #d4af37;
+            color: #000000;
+            border: none;
+            padding: 12px;
+            font-size: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            font-weight: bold;
+            margin-top: 5px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+        button:hover {
+            background: #e6c547;
+            transform: translateY(-1px);
+        }
+        .payment-section, .admin-section, .waiting-section, .success-section {
+            display: none;
+        }
+        .payment-box {
+            background: #1a1a1a;
+            border: 1px solid #d4af37;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        .payment-box h3 {
+            color: #d4af37;
+            margin-top: 0;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .bank-item {
+            background: #111111;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #333333;
+            font-size: 13px;
+            color: #e5e5e5;
+        }
+        .bank-item b {
+            color: #d4af37;
+        }
+        .account-name {
+            text-align: center;
+            font-weight: bold;
+            color: #000000;
+            margin-top: 12px;
+            background: #d4af37;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .receipt-upload {
+            margin-top: 15px;
+            background: #111111;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px dashed #d4af37;
+        }
+        .admin-section {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #d4af37;
+        }
+        .admin-box-title {
+            color: #d4af37;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .admin-number-management {
+            background: #111111;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #333333;
+            margin-bottom: 15px;
+        }
+        .admin-num-tag {
+            display: inline-block;
+            background: #222222;
+            color: #f3e5ab;
+            padding: 4px 8px;
+            margin: 2px;
+            border-radius: 4px;
+            font-size: 11px;
+            border: 1px solid #d4af37;
+        }
+        .admin-num-tag span {
+            color: #ff4d4d;
+            cursor: pointer;
+            margin-left: 5px;
+            font-weight: bold;
+        }
+        .table-container {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #333333;
+            border-radius: 8px;
+            background: #111111;
+            margin-top: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            text-align: left;
+            color: #ffffff;
+        }
+        th, td {
+            padding: 8px;
+            border-bottom: 1px solid #333333;
+        }
+        th {
+            background-color: #1a1a1a;
+            color: #d4af37;
+        }
+        .contact-footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #aaaaaa;
+            border-top: 1px dashed #444444;
+            padding-top: 15px;
+        }
+        .telegram-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #0088cc;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 8px;
+            font-size: 13px;
+            transition: background 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            width: 80%;
+        }
+        .telegram-btn img {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+        }
+        .telegram-btn:hover {
+            background-color: #006699;
+        }
+        .share-btn {
+            background-color: #25D366;
+            margin-top: 8px;
+        }
+        .share-btn:hover {
+            background-color: #1EBE5D;
+        }
+        .admin-btn {
+            background: none;
+            border: none;
+            color: #cccccc;
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 15px;
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: #111111;
+            border: 2px solid #d4af37;
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 90%;
+            max-height: 90%;
+            text-align: center;
+        }
+        .modal-content img {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 6px;
+        }
+        .close-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .msg-box {
+            text-align: center;
+            padding: 25px;
+            background: #1a1a1a;
+            border-radius: 10px;
+            border: 1px solid #d4af37;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- የሚንቀሳቀስ ጽሑፍ -->
+        <div class="marquee-box">
+            <marquee behavior="scroll" direction="left">🚗 🎊 ሂኒቾ የመኪና ዕጣ ይሞክሩ ይሸለሙ! 🎊 🚗</marquee>
+        </div>
+
+        <h2>🚗 ሂኒቾ የመኪና ዕጣ</h2>
+        <div class="subtitle">ህይወትዎን የሚቀይር አስደናቂ ዕድል!</div>
+
+        <!-- የሰዓት መቁጠሪያ (Countdown Timer) -->
+        <div class="timer-box">
+            <div class="timer-title">⏳ ዕጣው የሚዘጋበት የቀረ ጊዜ</div>
+            <div id="countdown">ጫን በመጫን ላይ...</div>
+        </div>
+
+        <!-- 1. የምዝገባ ፎርም -->
+        <div id="formSection">
+            <!-- ማሳሰቢያ -->
+            <div class="notice-box">
+                ⚠️ <b>ማሳሰቢያ፦</b> ዕጣ ቁጥር ሲመረጡ እና ስልክ ቁጥር ሲያስገቡ ትክክለኛ መረጃ መሆኑን በጥንቃቄ ያረጋግጡ!
+            </div>
+
+            <!-- የቀሪ ቁጥሮች ዝርዝር ማሳያ -->
+            <div class="available-numbers-box">
+                <div class="available-numbers-title">💡 የቀሩት ክፍት ዕጣ ቁጥሮች</div>
+                <div id="numbersList"></div>
+            </div>
+
+            <div class="prizes-box">
+                <h4>🏆 የዕጣው ሽልማቶች</h4>
+                <ul>
+                    <li><strong>1ኛ ዕጣ:</strong> Chevrolet 2022 መኪና</li>
+                    <li><strong>2ኛ ዕጣ:</strong> 100,000.00 ብር</li>
+                    <li><strong>3ኛ ዕጣ:</strong> 50,000.00 ብር</li>
+                </ul>
+            </div>
+
+            <!-- ተደጋጋሚ ጥያቄዎች (FAQ) -->
+            <div class="faq-box">
+                <h4>❓ ተደጋጋሚ ጥያቄዎች (FAQ)</h4>
+                <div class="faq-q">1. ክፍያ ከፈጸምኩ በኋላ እንዴት አረጋግጣለሁ?</div>
+                <div class="faq-a">የባንክ ደረሰኝዎን (Screenshot) አስገብተው "ምዝገባ አጠናቅ" የሚለውን ሲጫኑ በአድሚን በኩል ተጣርቶ ቁጥርዎ በሰላም ይያዝልዎታል።</div>
+                <div class="faq-q">2. ዕጣው የሚወጣበት ቀን ማስተላለፍ ይቻላል?</div>
+                <div class="faq-a">አይቻልም፤ ከተቀመጠው የሰዓት ገደብ ማብቂያ በኋላ በቀጥታ በቴሌግራም ግሩፓችን የላይቭ ስርጭት ይፋ ይሆናል።</div>
+            </div>
+
+            <div class="ticket-info">
+                🎫 የቲኬት ዋጋ፦ 2,500 ብር
+            </div>
+            
+            <form id="lotteryForm" onsubmit="proceedToPayment(event)">
+                <div class="form-group">
+                    <label for="luckyNumber">የመረጡት ዕጣ ቁጥር</label>
+                    <input type="number" id="luckyNumber" placeholder="ከላይ ካሉት ቁጥሮች ይምረጡ" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="fullName">ሙሉ ስም</label>
+                    <input type="text" id="fullName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phoneNumber">ስልክ ቁጥር</label>
+                    <input type="tel" id="phoneNumber" required>
+                </div>
+
+                <button type="submit">ወደ ክፍያ አማራጭ ሄድ 💳</button>
+            </form>
+        </div>
+
+        <!-- 2. የክፍያ አማራጭ እና ደረሰኝ ማስገቢያ ገጽ -->
+        <div id="paymentSection" class="payment-section">
+            <div class="payment-box">
+                <h3>💳 የክፍያ አማራጮች</h3>
+                <p style="font-size: 13px; text-align: center; margin-top: 0; color: #cccccc;">እባክዎ የ 2,500 ብር ክፍያ ከታች ባሉት የባንክ ሂሳቦች ይፈጽሙ፡</p>
+                
+                <div class="bank-item">
+                    🏦 <b>የኢትዮጵያ ንግድ ባንክ (CBE):</b><br> 1000302209824
+                </div>
+                <div class="bank-item">
+                    🏦 <b>አቢሲኒያ ባንክ (Bank of Abyssinai):</b><br> 108217537
+                </div>
+                <div class="bank-item">
+                    🏦 <b>አዋሽ ባንክ (Awash Bank):</b><br> 01347948725300
+                </div>
+
+                <div class="account-name">
+                    👤 ስም (NAME): Hanna Dessalgn Genetu
+                </div>
+
+                <div class="receipt-upload">
+                    <label for="receiptFile" style="color: #d4af37; font-size: 13px;">📄 የክፍያ ደረሰኝ (Screenshot) ያስገቡ፦</label>
+                    <input type="file" id="receiptFile" accept="image/*" required style="border: none; padding: 5px 0; background: transparent;">
+                </div>
+            </div>
+
+            <button onclick="completeRegistration()" style="background: #28a745; color: white;">ክፍያ ፈጽሜያለሁ (ምዝገባ አጠናቅ)</button>
+            <button onclick="goBack()" style="background: #444444; color: white; margin-top: 8px;">← ተመለስ</button>
+        </div>
+
+        <!-- 3. ተጠቃሚው ደረሰኝ ሲልክ የሚጠብቅበት ገጽ -->
+        <div id="waitingSection" class="waiting-section">
+            <div class="msg-box">
+                <h3 style="color: #d4af37;">⏳ እባክዎ ትንሽ ይጠብቁ</h3>
+                <p style="font-size: 14px; color: #cccccc;">የክፍያ ደረሰኝዎ በአድሚን እየተጣራ ነው። ሲረጋገጥ ማሳወቂያ ይደርስዎታል።</p>
+            </div>
+        </div>
+
+        <!-- 4. አድሚን ካረጋገጠ በኋላ ለተጠቃሚው የሚታይ ስኬታማ መልእክት -->
+        <div id="successSection" class="success-section">
+            <div class="msg-box">
+                <h3 style="color: #28a745;">🎉 በተሳካ ሁኔታ ተመዝግቧል!</h3>
+                <p style="font-size: 14px; color: #ffffff;" id="successMsgText"></p>
+                <button onclick="location.reload()" style="margin-top: 15px;">ወደ መጀመሪያው ገጽ ተመለስ</button>
+            </div>
+        </div>
+
+        <!-- 5. የአድሚን ገጽ -->
+        <div id="adminSection" class="admin-section">
+            <h3 style="color: #d4af37; margin-top: 0; text-align: center;">🔐 የአድሚን መቆጣጠሪያ ፓነል</h3>
+            
+            <div class="admin-number-management">
+                <div class="admin-box-title">⚙️ የዕጣ ቁጥሮች አስተዳደር</div>
+                <div style="display: flex; gap: 5px; margin-bottom: 8px;">
+                    <input type="number" id="newNumberInput" placeholder="አዲስ ቁጥር ያስገቡ" style="padding: 6px; font-size: 13px;">
+                    <button onclick="addNewNumber()" style="width: 100px; padding: 6px; font-size: 12px; margin-top: 0;">ቁጥር አክል</button>
+                </div>
+                <div style="font-size: 11px; color: #aaaaaa; margin-bottom: 5px;">የቀሩ ቁጥሮች (በ ❌ አጥፋ):</div>
+                <div id="adminNumbersList" style="max-height: 80px; overflow-y: auto;"></div>
+            </div>
+
+            <p style="font-size: 12px; text-align: center; color: #cccccc; margin-bottom: 5px;">የተመዝጋቢዎች ዝርዝር እና የክፍያ ደረሰኞች</p>
+            
+            <div class="table-container">
+                <table id="adminTable">
+                    <thead>
+                        <tr>
+                            <th>ቁጥር</th>
+                            <th>ስም</th>
+                            <th>ስልክ</th>
+                            <th>እርምጃ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminTableBody"></tbody>
+                </table>
+            </div>
+
+            <button onclick="logoutAdmin()" style="background: #dc3545; color: white; margin-top: 15px;">ከአድሚን ውጣ (Logout)</button>
+        </div>
+
+        <!-- እውቂያዎች፣ የቴሌግራም ግሩፕ፣ ድጋፍ እና ማጋሪያ አዝራር -->
+        <div class="contact-footer">
+            📞 ስልክ፦ <b>0993277328</b><br>
+            
+            <!-- የቴሌግራም ግሩፕ አዝራር -->
+            <a href="https://t.me/hanichmekinaekubb" target="_blank" class="telegram-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+                የቴሌግራም ግሩፕ (Telegram Group)
+            </a>
+
+            <!-- የቴሌግራም ድጋፍ አዝራር -->
+            <a href="https://t.me/hanichmekinaekub" target="_blank" class="telegram-btn" style="background-color: #006699;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+                የቴሌግራም ድጋፍ (Telegram Support)
+            </a>
+
+            <!-- ድረ-ገጹን ለሌሎች የማጋሪያ አዝራር -->
+            <a href="javascript:void(0);" onclick="shareWebsite()" class="telegram-btn share-btn">
+                📤  ለጓደኛ ሼር አድርግ (Share)
+            </a>
+            
+            <button class="admin-btn" onclick="checkAdminPassword()">🔐 አድሚን መግቢያ (Admin Login)</button>
+        </div>
+    </div>
+
+    <!-- የፎቶ ማሳያ ፖፕአፕ (Modal) -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <h4 style="margin-top: 0; color: #d4af37;">የክፍያ ደረሰኝ ፎቶ</h4>
+            <img id="modalImage" src="" alt="የክፍያ ደረሰኝ">
+            <br><br>
+            <button id="approveBtn" style="background: #28a745; color: white; margin-bottom: 5px;">✅ ትክክል ነው (አረጋግጥ)</button>
+            <button class="close-btn" onclick="closeModal()">ዝጋ (Close)</button>
+        </div>
+    </div>
+
+    <script>
+        let availableNumbers = [
+            797, 942, 957, 986, 996, 997, 1025, 1038, 1073, 
+            1082, 1100, 1131, 1139, 1155, 1168, 1177, 1178, 
+            1186, 1194, 1200, 1993, 2053, 2055, 2090, 2096, 2138
+        ];
+
+        let participants = [];
+        let tempParticipant = {};
+        let currentSelectedIndex = null;
+
+        function renderAvailableNumbers() {
+            const container = document.getElementById('numbersList');
+            container.innerHTML = '';
+            if (availableNumbers.length === 0) {
+                container.innerHTML = '<span style="color: #ff4d4d; font-size: 12px;">ሁሉም ቁጥሮች ተይዘዋል!</span>';
+                return;
+            }
+            availableNumbers.forEach(num => {
+                const span = document.createElement('span');
+                span.className = 'number-tag';
+                span.innerText = num;
+                span.onclick = function() {
+                    document.getElementById('luckyNumber').value = num;
+                };
+                container.appendChild(span);
+            });
+            renderAdminNumbersList();
+        }
+
+        function renderAdminNumbersList() {
+            const adminContainer = document.getElementById('adminNumbersList');
+            adminContainer.innerHTML = '';
+            if (availableNumbers.length === 0) {
+                adminContainer.innerHTML = '<span style="color: #aaaaaa; font-size: 11px;">ምንም ቁጥር የለም</span>';
+                return;
+            }
+            availableNumbers.forEach(num => {
+                const tag = document.createElement('span');
+                tag.className = 'admin-num-tag';
+                tag.innerHTML = `${num} <span onclick="removeNumber(${num})" title="አጥፋ">❌</span>`;
+                adminContainer.appendChild(tag);
+            });
+        }
+
+        function removeNumber(num) {
+            if (confirm(`ቁጥር ${num} ከዝርዝር ውስጥ ማጥፋት ይፈልጋሉ?`)) {
+                availableNumbers = availableNumbers.filter(n => n !== num);
+                renderAvailableNumbers();
+            }
+        }
+
+        function addNewNumber() {
+            const input = document.getElementById('newNumberInput');
+            const val = parseInt(input.value.trim());
+            if (isNaN(val)) {
+                alert('እባክዎ ትክክለኛ ቁጥር ያስገቡ!');
+                return;
+            }
+            if (availableNumbers.includes(val)) {
+                alert('ይህ ቁጥር አስቀድሞ በዝርዝሩ ውስጥ አለ!');
+                return;
+            }
+            availableNumbers.push(val);
+            availableNumbers.sort((a, b) => a - b);
+            input.value = '';
+            renderAvailableNumbers();
+            alert(`ቁጥር ${val} በተሳካ ሁኔታ ተጨመረ!`);
+        }
+
+        // የሰዓት መቁጠሪያ (Countdown Timer)
+        const countdownDate = new Date().getTime() + (3 * 24 * 60 * 60 * 1000);
+        const timerInterval = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = countdownDate - now;
+
+            if (distance < 0) {
+                clearInterval(timerInterval);
+                document.getElementById("countdown").innerHTML = "ጊዜው አልቋል!";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("countdown").innerHTML = 
+                days + " ቀን : " + hours + " ሰዓት : " + minutes + " ደቂቃ : " + seconds + " ሰከንድ";
+        }, 1000);
+
+        function proceedToPayment(event) {
+            event.preventDefault();
+            const selectedNum = parseInt(document.getElementById('luckyNumber').value.trim());
+
+            if (!availableNumbers.includes(selectedNum)) {
+                alert('የመረጡት ቁጥር ከቀሪዎቹ ዝርዝር ውስጥ የለም ወይም ተይዟል። እባክዎ ትክክለኛ ቁጥር ይምረጡ!');
+                return;
+            }
+
+            tempParticipant = {
+                number: selectedNum,
+                name: document.getElementById('fullName').value.trim(),
+                phone: document.getElementById('phoneNumber').value.trim(),
+                status: 'pending'
+            };
+
+            document.getElementById('formSection').style.display = 'none';
+            document.getElementById('paymentSection').style.display = 'block';
+        }
+
+        function completeRegistration() {
+            const receiptInput = document.getElementById('receiptFile');
+            
+            if (receiptInput.files.length === 0) {
+                alert('እባክዎ የክፍያ ደረሰኝዎን (Screenshot) ያስገቡ!');
+                return;
+            }
+
+            const file = receiptInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                tempParticipant.receiptUrl = e.target.result;
+                participants.push(tempParticipant);
+
+                availableNumbers = availableNumbers.filter(n => n !== parseInt(tempParticipant.number));
+                renderAvailableNumbers();
+                updateAdminTable();
+
+                document.getElementById('paymentSection').style.display = 'none';
+                document.getElementById('waitingSection').style.display = 'block';
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        function goBack() {
+            document.getElementById('paymentSection').style.display = 'none';
+            document.getElementById('formSection').style.display = 'block';
+        }
+
+        function checkAdminPassword() {
+            const password = prompt("እባክዎ የአድሚን የሚስጥር ቁጥር ያስገቡ:");
+            if (password === "1919") {
+                document.getElementById('formSection').style.display = 'none';
+                document.getElementById('paymentSection').style.display = 'none';
+                document.getElementById('waitingSection').style.display = 'none';
+                document.getElementById('successSection').style.display = 'none';
+                document.getElementById('adminSection').style.display = 'block';
+            } else if (password !== null) {
+                alert('የተሳሳተ የሚስጥር ቁጥር ነው!');
+            }
+        }
+
+        function logoutAdmin() {
+            document.getElementById('adminSection').style.display = 'none';
+            document.getElementById('formSection').style.display = 'block';
+        }
+
+        function updateAdminTable() {
+            const adminTableBody = document.getElementById('adminTableBody');
+            adminTableBody.innerHTML = '';
+
+            participants.forEach((p, index) => {
+                const row = document.createElement('tr');
+                let statusText = p.status === 'approved' ? '<span style="color: #28a745; font-weight: bold;">✔ ተረጋግጧል</span>' : '<button onclick="viewReceipt(\'' + index + '\')" style="background: #0088cc; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;">ፎቶ አሳይ & አረጋግጥ</button>';
+                
+                row.innerHTML = `
+                    <td><strong>${p.number}</strong></td>
+                    <td>${p.name}</td>
+                    <td>${p.phone}</td>
+                    <td>${statusText}</td>
+                `;
+                adminTableBody.appendChild(row);
+            });
+        }
+
+        function viewReceipt(index) {
+            currentSelectedIndex = index;
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modalImg.src = participants[index].receiptUrl;
+            
+            const approveBtn = document.getElementById('approveBtn');
+            if (participants[index].status === 'approved') {
+                approveBtn.style.display = 'none';
+            } else {
+                approveBtn.style.display = 'block';
+                approveBtn.onclick = function() {
+                    approveParticipant(index);
+                };
+            }
+
+            modal.style.display = 'flex';
+        }
+
+        function approveParticipant(index) {
+            participants[index].status = 'approved';
+            updateAdminTable();
+            closeModal();
+            
+            if (tempParticipant === participants[index]) {
+                document.getElementById('waitingSection').style.display = 'none';
+                document.getElementById('successSection').style.display = 'block';
+                document.getElementById('successMsgText').innerHTML = `የእርስዎ የዕጣ ቁጥር <b>${participants[index].number}</b> በደንብ ተይዞልዎታል! እናመሰግናለን።`;
+                
+                confetti({
+                    particleCount: 120,
+                    spread: 80,
+                    origin: { y: 0.6 }
+                });
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        function shareWebsite() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'ሂኒቾ የመኪና ዕጣ',
+                    text: 'የሂኒቾ የመኪና ዕጣ ላይ በመሳተፍ Chevrolet መኪና እና የገንዘብ ሽልማቶችን ያሸንፉ!',
+                    url: window.location.href,
+                }).catch(() => {});
+            } else {
+                alert('ሊንኩ ተገልብጧል (Copied)! ለጓደኛዎ ማጋራት ይችላሉ።');
+            }
+        }
+
+        window.onload = function() {
+            renderAvailableNumbers();
+        };
+    </script>
+
+</body>
+</html>
